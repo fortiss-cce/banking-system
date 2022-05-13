@@ -37,10 +37,21 @@ def execute_donate(db: storage.Storage, args: list[str]) -> None:
     _print_all_accounts(db)
 
 
-def execute_withdraw(db: storage.Storage, args: list[str]) -> None: pass
+def execute_withdraw(db: storage.Storage, args: list[str]) -> None:
+    user, amount = args
+    amount = float(amount)
+   
+    print("Before withdrawal:")
+    _print_all_accounts(db)
 
+    balance = storage.account_get(db, user)
+
+    storage.account_update(db, user, balance - amount)
+
+    print("\nAfter withdrawal:")
+    _print_all_accounts()
     
-operations: list[Operations] = [
+operations: list[Operation] = [
     Operation('donate', ["<from_user>", "<to_user>", "<amount>"], execute_donate),
     Operation('withdraw', ["<user>", "<amount>"], execute_withdraw),
 ]

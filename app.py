@@ -42,7 +42,7 @@ if __name__ == '__main__':
         to_user = args["<to_user>"]
         amount = float(args["<amount>"])
 
-        cursor = conn.execute("SELECT * from ACCOUNT;")
+        cursor = conn.execute("SELECT * from ACCOUNT")
         print("Before donation:")
         for row in cursor:
             print("NAME = ", row[0], ";\tBALANCE = ", row[1])

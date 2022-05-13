@@ -1,6 +1,7 @@
-import sqlite3
 import pprint
 from docopt import docopt
+import utils.sqlite_storage
+from api.cli_controller import CLIController
 
 __doc__ = """
 Donation System
@@ -21,26 +22,21 @@ Existing accounts:
     * Johannes
 """
 
-if __name__ == '__main__':
-    conn = sqlite3.connect('./banking.db')
 
-    conn.execute("CREATE TABLE IF NOT EXISTS ACCOUNT (NAME TEXT PRIMARY KEY NOT NULL, BALANCE REAL NOT NULL);")
-    conn.execute("INSERT OR IGNORE INTO ACCOUNT (NAME, BALANCE) VALUES ('MagazinRoyale', 1000.00 );")
-    conn.execute("INSERT OR IGNORE INTO ACCOUNT (NAME, BALANCE) VALUES ('FynnKliemann', 1000.00 )")
-    conn.execute("INSERT OR IGNORE INTO ACCOUNT (NAME, BALANCE) VALUES ('Peter', 1000000.00 )")
-    conn.execute("INSERT OR IGNORE INTO ACCOUNT (NAME, BALANCE) VALUES ('Johannes', 1.00 )")
-    conn.commit()
+if __name__ == '__main__':
 
     args = docopt(__doc__)
     pprint.pprint(args)
+
+    connection = utils.sqlite_storage.SQLiteStorage()
+    controller = CLIController(connection)
+    controller.execute(args)
 
     if args["donate"]:
         # user1 = 'MagazinRoyale'  # this should be argument #1
         # user2 = 'FynnKliemann'  # this should be argument #2
         # amount = 100  # this should be argument #3
-        from_user = args["<from_user>"]
-        to_user = args["<to_user>"]
-        amount = float(args["<amount>"])
+
 
         cursor = conn.execute("SELECT * from ACCOUNT;")
         print("Before donation:")
@@ -69,8 +65,7 @@ if __name__ == '__main__':
         conn.close()
 
     if args["withdraw"]:
-        user = args["<user>"]
-        amount = float(args["<amount>"])
+
 
         cursor = conn.execute("SELECT * from ACCOUNT;")
         print("Before withdrawal:")

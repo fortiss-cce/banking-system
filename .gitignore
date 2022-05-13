@@ -1,3 +1,5 @@
 .venv
 .vscode
 banking.db
+.idea
+__pycache__

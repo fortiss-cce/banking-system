@@ -1,44 +1,62 @@
+import abc
+from typing import Iterable
+
 import sqlite3
 
-class storage():
-    
 
+class Storage(abc.ABC):
 
-    def storage_connect(storage_path: str):  
+    @abc.abstractmethod
+    def connect(self):
         pass
 
-    def storage_excecute(storage_execute_str: str):
+    @abc.abstractmethod
+    def terminate(self):
         pass
 
-    def storage_commit():
+    @abc.abstractmethod
+    def execute(self, statement: str):
         pass
 
-    def storage_close():
+    @abc.abstractmethod
+    def execute_statements(self, statements: Iterable[str]):
         pass
 
     def __enter__(self):
-        self.storage_connect()
+        self.connect()
+        return self
 
-    def __exit__(selfe, type, value, tb):
-        self.storage_close()
+    def __exit__(self, type, value, tb):
+        self.terminate()
 
 
-class storage_sqlite3(storage):
+class StorageSqlite(Storage):
+
     def __init__(self, storage_path):
         self.storage_path = storage_path
+        self.conn = None
 
-    def storage_connect(self):
-        conn = sqlite3.connect(self.storage_path)
+    def _commit(self):
+        self.conn.commit()
 
-    def storage_excecute(storage_execute_str: str):
-        conn.execute(storage_execute_str)
+    def connect(self):
+        self.conn = sqlite3.connect(self.storage_path)
 
-    def storage_commit():
-        conn.commit()
+    def execute(self, statement: str):
+        if self.conn is None:
+            raise ValueError("Storage not initialized")
+        self.conn.execute(statement)
+        self._commit()
 
-    def storage_close():
-        conn.close()
+    def execute_statements(self, statements: Iterable[str]):
+        if self.conn is None:
+            raise ValueError("Storage not initialized")
+        for statement in statements:
+            self.conn.execute(statement)
+        self._commit()
 
-
-
-       
+    def terminate(self):
+        if self.conn is None:
+            raise ValueError("Storage not initialized")
+        self.conn.close()
+        self.conn = None

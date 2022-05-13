@@ -1,8 +1,9 @@
 import pprint
 from docopt import docopt
 
-from DB_Service import SqlBroker
-from utilities import MoneyTransfer
+from DB_Service import Broker, SqlBroker
+from utilities import DEMO_DB_SETUP, MoneyTransfer, STORAGE_PATH
+from storage import StorageSqlite
 
 __doc__ = """
 Donation System
@@ -24,34 +25,35 @@ Existing accounts:
 """
 
 
-def print_user_balances(*users):
-    for user in users:
-        print("NAME = ", user, ";\tBALANCE = ", broker.user_balance(user))
+def print_user_balances(brk: Broker, *users):
+    for usr in users:
+        print("NAME = ", usr, ";\tBALANCE = ", brk.user_balance(usr))
 
 
 if __name__ == '__main__':
-    broker = SqlBroker()
-
     args = docopt(__doc__)
     pprint.pprint(args)
 
-    if args["donate"]:
-        transfer = MoneyTransfer(args["--from"], args["--to"], float(args["--amount"]))
+    with StorageSqlite(STORAGE_PATH) as storage:
+        storage.execute_statements(DEMO_DB_SETUP)
+        broker = SqlBroker(storage)
 
-        print("Before donation:")
-        print_user_balances(transfer.from_user, transfer.to_user)
-        broker.transfer(transfer)
-        print("After donation:")
-        print_user_balances(transfer.from_user, transfer.to_user)
+        if args["donate"]:
+            transfer = MoneyTransfer(args["<from_user>"], args["<to_user>"], float(args["--amount"]))
 
-    if args["withdraw"]:
-        user = args["<user>"]
-        amount = float(args["<amount>"])
+            print("Before donation:")
+            print_user_balances(broker, transfer.from_user, transfer.to_user)
+            broker.transfer(transfer)
+            print("After donation:")
+            print_user_balances(broker, transfer.from_user, transfer.to_user)
 
-        print("Before withdrawal:")
-        print_user_balances(user)
-        broker.withdraw(user, amount)
-        print("\nAfter withdrawal:")
-        print_user_balances(user)
+        if args["withdraw"]:
+            broker = SqlBroker(storage)
+            user = args["<user>"]
+            amount = float(args["<amount>"])
 
-        conn.close()
+            print("Before withdrawal:")
+            print_user_balances(user)
+            broker.withdraw(user, amount)
+            print("\nAfter withdrawal:")
+            print_user_balances(user)

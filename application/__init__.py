@@ -15,8 +15,7 @@
 
 from abc import ABC, abstractmethod
 
-from ..domain.transaction import Transaction, IncomingTransaction, OutgoingTransaction
-from ..domain.account import Account
+from ..domain import Transaction, IncomingTransaction, OutgoingTransaction, Account
 
 
 class Action(ABC):

@@ -20,7 +20,13 @@ from requests import patch
 
 from . import DataStore
 
-from ..domain import IncomingTransaction, OutgoingTransaction, Transaction, Account
+from ..domain import (
+    IncomingTransaction,
+    OutgoingTransaction,
+    Transaction,
+    Account,
+    DataStore,
+)
 
 
 class SQLiteStore(DataStore):

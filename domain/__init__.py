@@ -45,3 +45,20 @@ class OutgoingTransaction:
 @dataclass
 class IncomingTransaction:
     pass
+
+
+class DataStore(ABC):
+    @abstractmethod
+    def setup(self):
+        pass
+
+    @abstractmethod
+    def execute_transactions(self, transactions: list[Transaction]):
+        pass
+
+    def get_account_info(self) -> list[Account]:
+        pass
+
+    @abstractmethod
+    def teardown(self):
+        pass

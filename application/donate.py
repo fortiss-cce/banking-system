@@ -1,6 +1,8 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 from domain.user import User
 
+
 class DonationService(ABC):
-    def donate(self, from_user: User, to_user: User, amount:float):
+    @abstractmethod
+    def donate(self, from_user: User, to_user: User, amount: float):
         pass

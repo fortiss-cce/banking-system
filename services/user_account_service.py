@@ -1,5 +1,5 @@
 from repositories.sqlite_repository import SQLiteRepository
-from
+
 
 class UserAccountService:
 

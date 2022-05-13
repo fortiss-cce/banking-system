@@ -2,7 +2,7 @@
 import pprint
 from docopt import docopt
 
-import storage
+import storage_sqlite as storage
 import operations
 
 __doc__ = """
@@ -39,3 +39,4 @@ if __name__ == '__main__':
         if not args[op.name]: continue
         operations.execute(op, db, [args[i] for i in op.args])
         
+    storage.close(db)

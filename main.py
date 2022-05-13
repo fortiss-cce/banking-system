@@ -41,17 +41,16 @@ Existing accounts:
 """
 
 
-def do_dontation(args: dict, data_store: DataStore):
+def do_dontation(args: dict, data_store: DataStore, user_data):
     from_user_name = args["<from_user>"]
     to_user_name = args["<to_user>"]
     amount = float(args["<amount>"])
 
-    # Select users from user data
+    # Select users from user data by looping over user_data
 
     # Create Action with users and amount
-
-    # Get transactions from action
-    t: list[Transaction] = None
+    action = DonateAction(from_account,to_account,amount)
+    t: list[Transaction] = action.steps()
     data_store.execute_transactions(t)
 
 

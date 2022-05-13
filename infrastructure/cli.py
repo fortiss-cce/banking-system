@@ -39,9 +39,7 @@ if __name__ == "__main__":
     bank = Bank(database)
 
     if args["donate"]:
-        # user1 = 'MagazinRoyale'  # this should be argument #1
-        # user2 = 'FynnKliemann'  # this should be argument #2
-        # amount = 100  # this should be argument #3
+        ## nicer would be if we check if a user already exists
         from_user = User(args["<from_user>"])
         to_user = User(args["<to_user>"])
         amount = float(args["<amount>"])

@@ -17,9 +17,13 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
 from .core import Transaction
+from .data import DataStore
 
 
 class Action(ABC):
     @abstractmethod
     def steps(self) -> list[Transaction]:
         pass
+
+    def execute(self, data_store: DataStore):
+        data_store.execute_transactions(self.steps())

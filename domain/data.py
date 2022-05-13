@@ -28,7 +28,12 @@ class DataStore(ABC):
     def execute_transactions(self, transactions: list[Transaction]):
         pass
 
+    @abstractmethod
     def get_account_info(self) -> list[Account]:
+        pass
+
+    @abstractmethod
+    def get_account_for_username(self, name: str) -> Account:
         pass
 
     @abstractmethod

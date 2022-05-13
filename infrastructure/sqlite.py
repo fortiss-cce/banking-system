@@ -86,5 +86,8 @@ class SQLiteStore(DataStore):
                 accounts.append(account)
         return accounts
 
+    def get_account_for_username(self, name: str) -> Account:
+        return Account("", 4)
+
     def teardown(self):
         self.conn.close()

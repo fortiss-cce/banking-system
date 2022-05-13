@@ -18,8 +18,9 @@ import pprint
 from docopt import docopt
 
 from .infrastructure.sqlite import SQLiteStore
-from .domain import Transaction
-from .infrastructure import DataStore
+from .domain.core import Transaction
+from .domain.data import DataStore
+from .application.donate import DonateAction
 
 __doc__ = """
 Donation System
@@ -49,7 +50,7 @@ def do_dontation(args: dict, data_store: DataStore, user_data):
     # Select users from user data by looping over user_data
 
     # Create Action with users and amount
-    action = DonateAction(from_account,to_account,amount)
+    action = DonateAction(from_account, to_account, amount)
     t: list[Transaction] = action.steps()
     data_store.execute_transactions(t)
 
@@ -70,5 +71,4 @@ if __name__ == "__main__":
 
     user_data = data_store.get_account_info()
 
-    if args["donate"]:
-        do_dontation(args, data_store)
+    command = args["donate"]

@@ -12,15 +12,21 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+from pathlib import Path
 import sqlite3
 from unicodedata import name
+
+from requests import patch
 
 from . import DataStore
 
 from ..domain import IncomingTransaction, OutgoingTransaction, Transaction, Account
 
 
-class SQLite(DataStore):
+class SQLiteStore(DataStore):
+    def __init__(self, path: Path = Path("./banking.db")) -> None:
+        super().__init__()
+        self.path = path
 
     # NOTE: cursor needs a proper type; just too lazy rn
     def _handle_incoming_transaction(transaction: IncomingTransaction, cursor: object):
@@ -30,7 +36,7 @@ class SQLite(DataStore):
         pass
 
     def setup(self):
-        self.conn = sqlite3.connect("./banking.db")
+        self.conn = sqlite3.connect(self.path.to_absolute())
         self.conn.isolation_level = None
 
         self.conn.execute(

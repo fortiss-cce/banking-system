@@ -33,19 +33,15 @@ class Account(ABC):
 
 @dataclass
 class Transaction(ABC):
-    user: "Account"
+    user: Account
     amount: float
-
-    @abstractmethod
-    def execute(self):
-        pass
 
 
 @dataclass
-class OutgoingTransaction(ABC):
+class OutgoingTransaction:
     pass
 
 
 @dataclass
-class IncomingTransaction(ABC):
+class IncomingTransaction:
     pass

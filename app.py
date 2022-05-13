@@ -13,6 +13,12 @@ Options:
     -t, --to               The user to which bank account is donated.
     -u, --user             The user wanting to withdraw money from his/her account.
     -a, --amount           The amount handled by the command.
+    
+Existing accounts:
+    * MagazinRoyale
+    * FynnKliemann
+    * Peter
+    * Johannes
 """
 
 if __name__ == '__main__':

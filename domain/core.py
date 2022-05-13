@@ -13,26 +13,36 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
 from abc import ABC, abstractmethod
-
-from ..domain import (
-    Transaction,
-    IncomingTransaction,
-    OutgoingTransaction,
-    Account,
-    Action,
-)
+from dataclasses import dataclass
 
 
-class DonateAction(Action):
-    def __init__(self, from_account: Account, to_account: Account, amount: float):
-        super().__init__()
-        self.from_account = from_account
-        self.to_account = to_account
-        self.amount = amount
+@dataclass
+class Account(ABC):
+    username: str
+    balance: float
 
-    def steps(self) -> list[Transaction]:
-        return [
-            OutgoingTransaction(self.from_account, self.amount),
-            IncomingTransaction(self.to_account, self.amount),
-        ]
+    @abstractmethod
+    def set_balance(self, balance: float):
+        pass
+
+    @abstractmethod
+    def get_balance(self, balance: float):
+        pass
+
+
+@dataclass
+class Transaction(ABC):
+    user: Account
+    amount: float
+
+
+@dataclass
+class OutgoingTransaction:
+    pass
+
+
+@dataclass
+class IncomingTransaction:
+    pass

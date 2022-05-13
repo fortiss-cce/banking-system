@@ -14,25 +14,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from abc import ABC, abstractmethod
+from dataclasses import dataclass
 
-from ..domain import (
-    Transaction,
-    IncomingTransaction,
-    OutgoingTransaction,
-    Account,
-    Action,
-)
+from .core import Transaction
 
 
-class DonateAction(Action):
-    def __init__(self, from_account: Account, to_account: Account, amount: float):
-        super().__init__()
-        self.from_account = from_account
-        self.to_account = to_account
-        self.amount = amount
-
+class Action(ABC):
+    @abstractmethod
     def steps(self) -> list[Transaction]:
-        return [
-            OutgoingTransaction(self.from_account, self.amount),
-            IncomingTransaction(self.to_account, self.amount),
-        ]
+        pass

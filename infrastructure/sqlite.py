@@ -18,14 +18,13 @@ from unicodedata import name
 
 from requests import patch
 
-from . import DataStore
+from ..domain.data import DataStore
 
-from ..domain import (
+from ..domain.core import (
     IncomingTransaction,
     OutgoingTransaction,
     Transaction,
     Account,
-    DataStore,
 )
 
 

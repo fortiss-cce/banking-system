@@ -13,15 +13,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from abc import ABC, abstractmethod
 
-from ..domain import (
-    Transaction,
-    IncomingTransaction,
-    OutgoingTransaction,
-    Account,
-    Action,
-)
+from ..domain.core import Transaction, IncomingTransaction, OutgoingTransaction, Account
+from ..domain.action import Action
 
 
 class DonateAction(Action):

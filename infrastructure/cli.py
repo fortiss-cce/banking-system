@@ -30,12 +30,10 @@ if __name__ == "__main__":
     pprint.pprint(args)
 
     database = SQLDatabase("./banking.db")
-    database.connect()
     database.addUser(User("MagazinRoyale", 1000.0))
     database.addUser(User("FynnKliemann", 1000.0))
     database.addUser(User("Peter", 1000000.0))
     database.addUser(User("Johannes", 1.0))
-    database.closeDatabase()
     bank = Bank(database)
 
     if args["donate"]:

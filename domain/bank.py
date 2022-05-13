@@ -9,12 +9,10 @@ class Bank(DonationService, WithdrawService):
         self.database: Database = database
 
     def donate(self, from_user: User, to_user: User, amount: float):
-        self.database.connect()
         self.database.printBalances("Before donation:")
         self.database.subtractMoneyFromUser(from_user, amount)
         self.database.addMoneyToUser(to_user, amount)
         self.database.printBalances("After donation:")
-        self.database.closeDatabase()
 
     def withdraw(self, from_user: User, amount: float):
         self.database.printBalances("Before withdrawal:")

@@ -6,9 +6,6 @@ class Database(ABC):
     def __init__(file_path: str):
         pass
 
-    def connect(self):
-        pass
-
     def addUser(self, user: User, balance: float):
         pass
 
@@ -19,7 +16,4 @@ class Database(ABC):
         pass
 
     def printBalances(self, print_message: str):
-        pass
-
-    def closeDatabase(self):
         pass

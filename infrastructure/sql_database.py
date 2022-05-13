@@ -15,16 +15,22 @@ class SQLDatabase(Database):
         self.conn.commit()
         self.closeDatabase()
 
+    def connect(self):
+        self.conn = sqlite3.connect(self.file_path)
+
+    def closeDatabase(self):
+        self.conn.close()
+
     def addUser(self, user: User, balance: float):
+        self.connect()
         self.conn.execute(
             f"INSERT OR IGNORE INTO ACCOUNT (NAME, BALANCE) VALUES ({user.getName()}, {balance} )"
         )
         self.conn.commit()
-
-    def connect(self):
-        self.conn = sqlite3.connect(self.file_path)
+        self.closeDatabase()
 
     def addMoneyToUser(self, user: User, amount: float):
+        self.connect()
         cursor = self.conn.execute(
             "SELECT BALANCE FROM ACCOUNT WHERE NAME = ?;", (user.getName(),)
         )
@@ -38,8 +44,10 @@ class SQLDatabase(Database):
                 user.getName(),
             ),
         )
+        self.closeDatabase()
 
     def subtractMoneyFromUser(self, user: User, amount: float):
+        self.connect()
         cursor = self.conn.execute(
             "SELECT BALANCE FROM ACCOUNT WHERE NAME = ?;", (user.getName(),)
         )
@@ -55,8 +63,10 @@ class SQLDatabase(Database):
         )
 
         self.conn.commit()
+        self.closeDatabase()
 
     def printBalances(self, print_message: str):
+        self.connect()
         cursor = self.conn.execute("SELECT * from ACCOUNT;")
 
         cursor = self.conn.execute("SELECT * from ACCOUNT;")
@@ -64,5 +74,4 @@ class SQLDatabase(Database):
         for row in cursor:
             print("NAME = ", row[0], ";\tBALANCE = ", row[1])
 
-    def closeDatabase(self):
-        self.conn.close()
+        self.closeDatabase()

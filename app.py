@@ -29,19 +29,20 @@ from application.printallservice import PrintAllAccountsService
 from infrastructure.SQLStorage import SQLStorage
 
 if __name__ == '__main__':
-    conn = sqlite3.connect('./banking.db')
 
-    conn.execute("CREATE TABLE IF NOT EXISTS ACCOUNT (NAME TEXT PRIMARY KEY NOT NULL, BALANCE REAL NOT NULL);")
-    conn.execute("INSERT OR IGNORE INTO ACCOUNT (NAME, BALANCE) VALUES ('MagazinRoyale', 1000.00 );")
-    conn.execute("INSERT OR IGNORE INTO ACCOUNT (NAME, BALANCE) VALUES ('FynnKliemann', 1000.00 )")
-    conn.execute("INSERT OR IGNORE INTO ACCOUNT (NAME, BALANCE) VALUES ('Peter', 1000000.00 )")
-    conn.execute("INSERT OR IGNORE INTO ACCOUNT (NAME, BALANCE) VALUES ('Johannes', 1.00 )")
-    conn.commit()
+    tmp_conn = sqlite3.connect('./banking.db')
+    tmp_conn.execute("CREATE TABLE IF NOT EXISTS ACCOUNT (NAME TEXT PRIMARY KEY NOT NULL, BALANCE REAL NOT NULL);")
+    tmp_conn.execute("INSERT OR IGNORE INTO ACCOUNT (NAME, BALANCE) VALUES ('MagazinRoyale', 1000.00 );")
+    tmp_conn.execute("INSERT OR IGNORE INTO ACCOUNT (NAME, BALANCE) VALUES ('FynnKliemann', 1000.00 )")
+    tmp_conn.execute("INSERT OR IGNORE INTO ACCOUNT (NAME, BALANCE) VALUES ('Peter', 1000000.00 )")
+    tmp_conn.execute("INSERT OR IGNORE INTO ACCOUNT (NAME, BALANCE) VALUES ('Johannes', 1.00 )")
+    tmp_conn.commit()
+    tmp_conn.close()
 
     args = docopt(__doc__)
     pprint.pprint(args)
 
-    storage = SQLStorage(conn)
+    storage = SQLStorage('./banking.db')
     print_service = PrintAllAccountsService(storage)
 
     if args["donate"]:
@@ -57,9 +58,6 @@ if __name__ == '__main__':
 
         donate_service.donate(from_user, to_user, amount)
 
-        conn.commit()
-        conn.close()
-
         print_service.print_balances("After")
 
     if args["withdraw"]:
@@ -71,8 +69,5 @@ if __name__ == '__main__':
         withdraw_service = WithdrawService(storage)
 
         withdraw_service.withdraw(user, amount)
-
-        conn.commit()
-        conn.close()
 
         print_service.print_balances("After")

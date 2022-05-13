@@ -7,13 +7,13 @@ from domain.account import Account
 class Storage(ABC):
 
     @abstractmethod
-    def updateAccountBalance(account: Account, amount: float):
+    def updateAccountBalance(self, account: Account, amount: float):
         pass
 
     @abstractmethod
-    def getAllAccounts() -> Iterable[Account]:
+    def getAllAccounts(self) -> Iterable[Account]:
         pass
 
     @abstractmethod
-    def getAccountForName(name: str) -> Account:
+    def getAccountForName(self, name: str) -> Account:
         pass

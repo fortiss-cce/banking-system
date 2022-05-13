@@ -21,6 +21,13 @@ Existing accounts:
     * Johannes
 """
 
+from application.donateservice import DonateService
+
+from application.withdrawservice import WithdrawService
+
+from application.printallservice import PrintAllAccountsService
+from infrastructure.SQLStorage import SQLStorage
+
 if __name__ == '__main__':
     conn = sqlite3.connect('./banking.db')
 
@@ -34,6 +41,9 @@ if __name__ == '__main__':
     args = docopt(__doc__)
     pprint.pprint(args)
 
+    storage = SQLStorage(conn)
+    print_service = PrintAllAccountsService(storage)
+
     if args["donate"]:
         # user1 = 'MagazinRoyale'  # this should be argument #1
         # user2 = 'FynnKliemann'  # this should be argument #2
@@ -42,52 +52,27 @@ if __name__ == '__main__':
         to_user = args["<to_user>"]
         amount = float(args["<amount>"])
 
-        cursor = conn.execute("SELECT * from ACCOUNT;")
-        print("Before donation:")
-        for row in cursor:
-            print("NAME = ", row[0], ";\tBALANCE = ", row[1])
+        print_service.print_balances("Before")
+        donate_service = DonateService(storage)
 
-        cursor = conn.execute("SELECT BALANCE FROM ACCOUNT WHERE NAME = ?;", (from_user,))
-        balance1 = 0
-        for row in cursor:
-            balance1 = row[0]
-        conn.execute("UPDATE ACCOUNT SET BALANCE = ? WHERE NAME = ?;", ((balance1 - amount), from_user,))
-
-        cursor = conn.execute("SELECT BALANCE FROM ACCOUNT WHERE NAME = ?;", (to_user,))
-        balance2 = 0
-        for row in cursor:
-            balance2 = row[0]
-        conn.execute("UPDATE ACCOUNT SET BALANCE = ? WHERE NAME = ?;", ((balance2 + amount), to_user,))
+        donate_service.donate(from_user, to_user, amount)
 
         conn.commit()
-
-        cursor = conn.execute("SELECT * from ACCOUNT;")
-        print("\nAfter donation:")
-        for row in cursor:
-            print("NAME = ", row[0], ";\tBALANCE = ", row[1])
-
         conn.close()
+
+        print_service.print_balances("After")
 
     if args["withdraw"]:
         user = args["<user>"]
         amount = float(args["<amount>"])
 
-        cursor = conn.execute("SELECT * from ACCOUNT;")
-        print("Before withdrawal:")
-        for row in cursor:
-            print("NAME = ", row[0], ";\tBALANCE = ", row[1])
+        print_service.print_balances("Before")
 
-        cursor = conn.execute("SELECT BALANCE FROM ACCOUNT WHERE NAME = ?;", (user,))
-        balance = 0
-        for row in cursor:
-            balance = row[0]
-        conn.execute("UPDATE ACCOUNT SET BALANCE = ? WHERE NAME = ?;", ((balance - amount), user,))
+        withdraw_service = WithdrawService(storage)
+
+        withdraw_service.withdraw(user, amount)
 
         conn.commit()
-
-        cursor = conn.execute("SELECT * from ACCOUNT;")
-        print("\nAfter withdrawal:")
-        for row in cursor:
-            print("NAME = ", row[0], ";\tBALANCE = ", row[1])
-
         conn.close()
+
+        print_service.print_balances("After")

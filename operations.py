@@ -1,5 +1,6 @@
 
 from dataclasses import dataclass
+from typing import Callable
 
 import storage
 from data import Account

@@ -2,8 +2,9 @@
 import pprint
 from docopt import docopt
 
-import storage_sqlite as storage
 import operations
+import storage
+from data import Account
 
 __doc__ = """
 Donation System
@@ -35,7 +36,7 @@ if __name__ == '__main__':
     args = docopt(__doc__)
     pprint.pprint(args)
 
-    for op in operations.operations():
+    for op in operations.operations:
         if not args[op.name]: continue
         operations.execute(op, db, [args[i] for i in op.args])
         

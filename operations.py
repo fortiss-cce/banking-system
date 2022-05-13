@@ -11,6 +11,10 @@ class Operation:
     args: list[str]
     _executor: Callable[[storage.Storage, list[str]], None]
 
+def _print_all_accounts(db: storage.Storage) -> None:
+    for account in storage.account_list(db):
+        print(account)    
+    
 def execute_donate(db: storage.Storage, args: list[str]) -> None:
     # user1 = 'MagazinRoyale'  # this should be argument #1
     # user2 = 'FynnKliemann'  # this should be argument #2
@@ -19,24 +23,18 @@ def execute_donate(db: storage.Storage, args: list[str]) -> None:
     amount = float(amount)
 
     print("Before donation:")
-    for account in storage.account_list(db):
-        print(account)
+    _print_all_accounts(db)
 
     balance1 = storage.account_get(db, from_user)
     balance2 = storage.account_get(db, to_user)
 
-    storage.account_update(
-    
-    conn.execute("UPDATE ACCOUNT SET BALANCE = ? WHERE NAME = ?;", ((balance2 + amount), to_user,))
+    storage.account_update(db, from_user, balance1 - amount)
+    storage.account_update(db, to_user,   balance2 - amount)
 
-    conn.commit()
+    storage.commit(db)
 
-    cursor = conn.execute("SELECT * from ACCOUNT;")
     print("\nAfter donation:")
-    for row in cursor:
-        print("NAME = ", row[0], ";\tBALANCE = ", row[1])
-
-    conn.close()
+    _print_all_accounts(db)
 
 
 def execute_withdraw(db: storage.Storage, args: list[str]) -> None: pass

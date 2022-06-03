@@ -14,5 +14,5 @@ class BankService:
         return self.store.retreive_accounts()
     def transfer_money(self, source: Account, target: Account, amount: float) -> tuple[Account, Account]:
         return self.store.transfer_money(source, target, amount)
-    def withdraw_money(self, source: Account, target: Account, amount: float) -> tuple[Account, Account]:
+    def withdraw_money(self, source: Account, amount: float) -> tuple[Account, Account]:
         return self.store.withdraw_money(source, amount)

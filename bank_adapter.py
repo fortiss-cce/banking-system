@@ -1,5 +1,6 @@
 import sqlite3
 from bank_domain import Account, AccountStore
+from decimal import *
 
 class SQLiteStore(AccountStore):
     connection: sqlite3.Connection
@@ -24,15 +25,15 @@ class SQLiteStore(AccountStore):
         """);
 
     @staticmethod
-    def _get_account_balance(cursor: sqlite3.Cursor, acc: str) -> float:
+    def _get_account_balance(cursor: sqlite3.Cursor, acc: str) -> Decimal:
         cursor.execute(f"SELECT BALANCE FROM ACCOUNT WHERE NAME = '{acc}'");
         row = cursor.fetchone()
         if row is None:
             cursor.execute("ROLLBACK;")
             raise ValueError(f"invalid account: '{acc}'")
-        return float(row[0])
+        return Decimal(row[0])
 
-    def transfer_money(self, source: str, target: str, amount: float) -> tuple[Account, Account]:
+    def transfer_money(self, source: str, target: str, amount: Decimal) -> tuple[Account, Account]:
         cursor = self.connection.cursor()
         cursor.execute("BEGIN;")
         source_balance = SQLiteStore._get_account_balance(cursor, source)
@@ -46,7 +47,7 @@ class SQLiteStore(AccountStore):
         cursor.close()
         return Account(source, source_balance - amount), Account(target, target_balance + amount)
 
-    def withdraw_money(self, source: str, amount: float) -> Account:
+    def withdraw_money(self, source: str, amount: Decimal) -> Account:
         cursor = self.connection.cursor()
         cursor.execute("BEGIN")
         source_balance = SQLiteStore._get_account_balance(cursor, source)
@@ -66,5 +67,5 @@ class SQLiteStore(AccountStore):
         cursor.close()
         accounts = []
         for row in rows:
-            accounts.append(Account(row[0], float(row[1])))
+            accounts.append(Account(row[0], Decimal(row[1])))
         return accounts

@@ -1,4 +1,5 @@
 from docopt import docopt
+from decimal import *
 
 from bank_domain import Account
 from bank_application import BankService
@@ -41,7 +42,7 @@ if __name__ == '__main__':
         if args["transfer"]:
             from_user = args["<from_user>"]
             to_user = args["<to_user>"]
-            amount = float(args["<amount>"])
+            amount = Decimal(args["<amount>"])
             from_account, to_account = bank.transfer_money(from_user, to_user, amount)
             print("Transferred money:")
             print(f"{from_account.name.ljust(30)} {from_account.balance + amount} - {amount}")
@@ -49,7 +50,7 @@ if __name__ == '__main__':
 
         elif args["withdraw"]:
             from_user = args["<user>"]
-            amount = float(args["<amount>"])
+            amount = Decimal(args["<amount>"])
             from_account = bank.withdraw_money(from_user, amount)
             print("Withdrew money:")
             print(f"{from_account.name.ljust(30)} {from_account.balance + amount} - {amount}")

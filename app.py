@@ -48,7 +48,7 @@ if __name__ == '__main__':
             print(f"{to_account.name.ljust(30)} {to_account.balance - amount} + {amount}")
 
         elif args["withdraw"]:
-            from_user = args["<from_user>"]
+            from_user = args["<user>"]
             amount = float(args["<amount>"])
             from_account = bank.withdraw_money(from_user, amount)
             print("Withdrew money:")

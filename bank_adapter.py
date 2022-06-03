@@ -42,7 +42,7 @@ class SQLiteStore(AccountStore):
             raise ValueError(f"insufficient funds in account: '{source}' {source_balance}")
         cursor.execute(f"UPDATE ACCOUNT SET BALANCE = BALANCE - {amount} WHERE NAME = '{source}';")
         cursor.execute(f"UPDATE ACCOUNT SET BALANCE = BALANCE + {amount} WHERE NAME = '{target}';")
-        cursor.execute("COMMIT;")
+        self.connection.commit()
         cursor.close()
         return Account(source, source_balance - amount), Account(target, target_balance + amount)
 
@@ -54,6 +54,7 @@ class SQLiteStore(AccountStore):
             cursor.close()
             raise ValueError(f"insufficient funds in account: '{source}' {source_balance}")
         cursor.execute(f"UPDATE ACCOUNT SET BALANCE = BALANCE - {amount} WHERE NAME = '{source}';")
+        self.connection.commit()
         cursor.close()
         return Account(source, source_balance - amount)
 
@@ -61,6 +62,7 @@ class SQLiteStore(AccountStore):
         cursor = self.connection.cursor()
         cursor.execute("SELECT * FROM ACCOUNT")
         rows = cursor.fetchall()
+        self.connection.commit()
         cursor.close()
         accounts = []
         for row in rows:

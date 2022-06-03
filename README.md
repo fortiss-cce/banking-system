@@ -24,6 +24,6 @@ In the end you should have a `onion architecture`-like structure with packages f
 
 # Run the system
 
-You can run the system by executing ``python app.py <arguments>. 
+You can run the system by executing ``python app.py <arguments>``. 
 
 To get all available commands you can execute ``python app.py --help``.

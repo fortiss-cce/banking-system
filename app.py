@@ -18,7 +18,7 @@ Existing accounts:
     * MagazinRoyale
     * FynnKliemann
     * Peter
-    * Johannes
+    * Alexandros
 """
 
 if __name__ == '__main__':

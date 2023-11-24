@@ -28,7 +28,9 @@ if __name__ == '__main__':
     args = docopt(__doc__)
     pprint.pprint(args)
 
-    db = DataBase("./banking.db")
+    DataBase.setup()
+
     cmd = CMDFactory.generate_cmd(args)
-    db.execute_cmd(cmd)
-    db.teardown()
+    cmd.execute()
+    
+    DataBase.teardown()

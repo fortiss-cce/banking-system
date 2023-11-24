@@ -1,6 +1,5 @@
 from domain.balance_change import BalanceChange
 
-
 class Withdraw(BalanceChange):
 
     def __init__(self):

@@ -1,7 +1,11 @@
-from abc import abstractmethod
+from abc import ABCMeta, abstractmethod
 
 
 class IStorage:
+    __metaclass__ = ABCMeta
+
+    def __init__(self, instance):
+        self.instance = instance
 
     @abstractmethod
     def create(self):
@@ -21,7 +25,18 @@ class IStorage:
 
 
 class Sqlite(IStorage):
-    pass
+
+    def create(self):
+        raise NotImplementedError('In progress')
+
+    def insert(self):
+        raise NotImplementedError('In progress')
+
+    def update(self):
+        raise NotImplementedError('In progress')
+
+    def select(self):
+        raise NotImplementedError('In progress')
 
 class Postgresql(IStorage):
-    NotImplementedError('In progress')
+    raise NotImplementedError('In progress')

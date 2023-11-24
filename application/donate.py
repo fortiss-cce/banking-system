@@ -10,6 +10,5 @@ class Donate(BalanceChange):
 
     def calculate_new_balance(self):
         self.account.balance -= self.amount_of_change
-        self.donate_to_account += self.donate_to_account
-
-
+        self.donate_to_account.balance += self.amount_of_change
+        return (self.account.balance, self.donate_to_account.balance)

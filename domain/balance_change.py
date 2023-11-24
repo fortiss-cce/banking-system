@@ -1,9 +1,10 @@
-from abc import abstractmethod
+from abc import ABCMeta, abstractmethod
 
 from domain.account import Account
 
 
 class BalanceChange:
+    __metaclass__ = ABCMeta
 
     account: Account
     amount_of_change: float

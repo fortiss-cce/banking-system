@@ -16,7 +16,7 @@ class Repository(ABC):
         pass
 
     @abstractmethod
-    def updateBankAccount(self, user: User):
+    def updateBankAccount(self, user: User, new_balance: float):
         pass
 
     @abstractmethod
